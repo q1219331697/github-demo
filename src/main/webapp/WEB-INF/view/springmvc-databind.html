@@ -1,0 +1,119 @@
+<#assign basePath="${request.getContextPath()}" />
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>index</title>
+
+<link rel="stylesheet" href="${basePath}/static/jquery-ui-bootstrap/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="${basePath}/static/jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.10.3.custom.css">
+<!--<link rel="stylesheet" href="${basePath}/static/jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.10.3.theme.css">-->
+<link rel="stylesheet" href="${basePath}/static/jquery-ui-bootstrap/assets/css/font-awesome.min.css">
+<!--[if IE 7]>
+    <link rel="stylesheet" href="${basePath}/static/jquery-ui-bootstrap/assets/css/font-awesome-ie7.min.css">
+    <![endif]-->
+<!--[if lt IE 9]>
+    <link rel="stylesheet" href="${basePath}/static/jquery-ui-bootstrap/css/custom-theme/jquery.ui.1.10.3.ie.css">
+    <![endif]-->
+
+<!-- <link href="${basePath}/static/jquery-ui/jquery-ui.min.css" rel="stylesheet"> -->
+<!-- <link href="${basePath}/static/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+<link href="${basePath}/static/core/main.css">
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="${basePath}/static/js/html5shiv.min.js"></script>
+      <script src="${basePath}/static/js/respond.min.js"></script>
+    <![endif]-->
+
+<script src="${basePath}/static/js/jquery.min.js"></script>
+<script src="${basePath}/static/jquery-ui/jquery-ui.min.js"></script>
+<script src="${basePath}/static/easyui/jquery.easyui.min.js"></script>
+<script src="${basePath}/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="${basePath}/static/core/main.js"></script>
+<script>
+//	$(function() {
+//		$("#datepicker").datepicker();
+//		$("#format").change(function() {
+//			$("#datepicker").datepicker("option", "dateFormat", $(this).val());
+//		});
+//	});
+
+</script>
+
+</head>
+<body>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="nav bs-sidenav">
+        <p>对象数组 必须用formbean </p>
+        <p>包括 array list map</p>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <form name="form1" method="post" action="">
+        <p>
+          <input class="ui-button-primary ui-button ui-corner-all" type="submit" value="提交">
+          <input class="ui-button-danger ui-button ui-corner-all" type="submit" value="提交">
+          <input class="ui-button-primary ui-btn-sm ui-button ui-corner-all" type="submit" value="提交">
+          <input class="ui-button-primary ui-btn-xs ui-button ui-corner-all" type="submit" value="提交">
+        </p>
+        <p><a href="#" class=".addrow">增加行</a></p>
+        <table width="90%" border="0" cellspacing="1" cellpadding="0">
+          <tr>
+            <td>id</td>
+            <td>username</td>
+            <td>op</td>
+          </tr>
+          <tbody>
+          <tr class="tpl">
+            <td>
+            <input name="users.password" type="text" value="1"></td>
+            <td>
+            <input name="users.username" type="text" value="1"></td>
+            <td><a href="#" class="del">删除</a></td>
+          </tr>
+          <tr class="tpl">
+            <td>
+            <input name="users.password" type="text" value="2"></td>
+            <td>
+            <input name="users.username" type="text" value="2"></td>
+            <td><a href="#" class="del">删除</a></td>
+          </tr>
+          <tr class="tpl">
+            <td>
+            <input name="users.password" type="text" value="2"></td>
+            <td>
+            <input name="users.username" type="text" value="2"></td>
+            <td><a href="#" class="del">删除</a></td>
+          </tr>
+          <tbody>
+        </table>
+        <p>&nbsp;</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+	$(function() {
+		$(".del").click(function() {
+			$(this).parent().parent().remove();
+			//return confirm("yes");
+			//if(confirm("yes")){
+//				$(this).parent().remove();
+//			}
+		});
+		
+		$(".addrow").click(function(){
+			$("tbody").append($(".tpl").html());
+		});
+	});
+
+</script>
+</body>
+</html>

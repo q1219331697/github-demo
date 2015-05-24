@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+	<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation">
+			<value>classpath:ehcache.xml</value>
+		</property>
+	</bean>
+
+	<bean id="ehCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+		<property name="cacheManager">
+			<ref bean="ehCacheManager" />
+		</property>
+		<property name="cacheName">
+			<value>myCache</value>
+		</property>
+	</bean>
+
+	<!-- find* /create cache拦截器 -->
+	<bean id="cacheMethodInterceptor" class="com.my373.interceptor.CacheMethodInterceptor">
+		<property name="cache">
+			<ref bean="ehCache" />
+		</property>
+	</bean>
+
+	<!--edit||delete /flush cache拦截器 -->
+	<bean id="cacheAfterReturningAdvice" class="com.my373.interceptor.CacheAfterReturningAdvice">
+		<property name="cache">
+			<ref bean="ehCache" />
+		</property>
+	</bean>
+
+	<!-- 定义哪些方法被拦截 -->
+	<bean id="cacheMethodPointcutAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+		<property name="advice">
+			<ref bean="cacheMethodInterceptor" />
+		</property>
+		<property name="mappedNames">
+			<list>
+				<value>find*</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="cacheAfterReturningAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+		<property name="advice">
+			<ref bean="cacheAfterReturningAdvice" />
+		</property>
+		<property name="mappedNames">
+			<list>
+				<value>add*</value>
+				<value>edit*</value>
+				<value>delete*</value>
+				<value>save*</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="cacheBeanNameAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="interceptorNames">
+			<list>
+				<!-- <value>cacheMethodInterceptor</value> -->
+				<!-- 修改为方法拦截 -->
+				<value>cacheMethodPointcutAdvisor</value>
+				<value>cacheAfterReturningAdvisor</value>
+			</list>
+		</property>
+		<property name="beanNames">
+			<list>
+				<value>*Service</value>
+			</list>
+		</property>
+	</bean>
+</beans>

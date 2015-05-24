@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	default-lazy-init="false">
+
+	<!-- xml 解析编码 -->
+	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />
+
+	<bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="freemarkerVariables">
+			<map>
+				<!-- key = "前台标签名称" value-ref = "bean_id" -->
+
+				<entry key="xml_escape" value-ref="fmXmlEscape" />
+			</map>
+		</property>
+		<!-- <property name="templateLoaderPath" value="file:${templateLoaderPath}/WEB-INF/view/" /> -->
+		<property name="templateLoaderPath" value="/WEB-INF/view/" />
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="tag_syntax">auto_detect</prop> <!-- 设置标签类型 两种：[] 和 <> 。[] 这种标记解析要快些 -->
+				<!-- 模版更新时间,正式环境,模版不会改变,可以将这个值设很大,提高效率 -->
+				<!-- <prop key="template_update_delay">3600</prop> -->
+				<prop key="template_update_delay">0</prop>
+				<!-- classic_compatible 属性可以防止模板解析空值时的错误 -->
+				<!-- 可以满足一般需要。默认情况变量为null则替换为空字符串，
+					如果需要自定义，写上${empty!"EmptyValue of fbysss"}的形式即可 -->
+				<prop key="classic_compatible">true</prop>
+				<prop key="defaultEncoding">UTF-8</prop>
+				<prop key="url_escaping_charset">UTF-8</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="boolean_format">true,false</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+				<prop key="time_format">HH:mm:ss</prop>
+				<prop key="number_format">0.######</prop>
+				<!-- 去掉前后空白 -->
+				<prop key="whitespace_stripping">true</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>
