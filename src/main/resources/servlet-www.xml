@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+	<!-- 只扫描controller目录，否则会与spring的其他目录有冲突，造成spring的AOP等功能不能使用 -->
+	<context:component-scan base-package="com.my373.*.controller" />
+
+	<mvc:default-servlet-handler />
+
+	<!-- 默认首页 -->
+	<mvc:view-controller path="/" view-name="redirect:/index" />
+
+	<!-- 多视图解析 -->
+	<bean id="multipleViewResolver" class="com.my373.core.web.CustomMultipleViewResolver">
+		<property name="defaultViewResolver" ref="freeMarkerViewResolver" />
+		<property name="viewResolverMap">
+			<map>
+				<entry>
+					<key>
+						<set>
+							<value>.htm</value>
+							<value>.html</value>
+							<value>.ftl</value>
+						</set>
+					</key>
+					<ref bean="freeMarkerViewResolver" />
+				</entry>
+				<entry>
+					<key>
+						<set>
+							<value>.jsp</value>
+						</set>
+					</key>
+					<ref bean="jspViewResolver" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!--
+		<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+	-->
+
+	<!-- freemarker视图解析器 -->
+	<!-- 不配置 suffix 后缀，由程序决定返回具体的视图解析器 -->
+	<bean id="freeMarkerViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="prefix" value="" />
+		<property name="contentType" value="text/html;charset=UTF-8"></property>
+		<property name="requestContextAttribute" value="request" />
+		<property name="exposeSpringMacroHelpers" value="true" />
+		<property name="exposeRequestAttributes" value="true" />
+		<property name="exposeSessionAttributes" value="true" />
+		<property name="order" value="1"></property>
+	</bean>
+
+	<!-- jsp视图解析器 -->
+	<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="" />
+		<property name="order" value="2"></property>
+	</bean>
+
+</beans>

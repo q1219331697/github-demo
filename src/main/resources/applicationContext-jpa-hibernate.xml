@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+	<!-- 配置Spring Data JPA扫描目录 -->
+	<!-- 只需定义接口，集成spring.data.jpa，实现由spring-data-jpa自动完成 -->
+	<jpa:repositories base-package="com.my373.*.dao" />
+	<jpa:repositories base-package="com.my373.dao" />
+
+	<!-- JPA实体管理工厂的配置 -->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+			</bean>
+		</property>
+		<!-- 如果指定jpaVendorAdapter此属性可选,且设定 jpaVendorAdapter 后，会自动设置jpaProperties -->
+		<property name="jpaProperties">
+			<props>
+				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop> -->
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<!-- hibernate.hbm2ddl.auto的值建议是“none”或“validate”。validate | update | create | create-drop -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<!-- <prop key="hibernate.default_batch_fetch_size">16</prop> -->
+			</props>
+		</property>
+
+		<!--待扫描的实体类包，不再需要persistence.xml了 -->
+		<property name="packagesToScan">
+			<list>
+				<value>com.my373.domain</value>
+				<value>com.my373.*.domain</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Jpa 事务配置 -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<!-- 配置AOP事务拦截 -->
+	<!-- <aop:config>
+		<aop:pointcut id="ServiceMethods" expression="execution(public * com.my373.service.*.impl.*.*(..))"
+		/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="ServiceMethods" />
+		</aop:config> -->
+
+	<!-- 配置事务通知的属性 -->
+	<!-- <tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+		<tx:method name="*" propagation="REQUIRED" />
+		<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+		</tx:attributes>
+		</tx:advice> -->
+
+	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionBeanNameAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="interceptorNames">
+			<list>
+				<value>transactionInterceptor</value>
+			</list>
+		</property>
+		<property name="beanNames">
+			<list>
+				<value>*Service</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- beans必须放到bean的后面，保险些，放到文件最后 -->
+	<!-- 团队开发测试环境 dev,test -->
+	<beans profile="dev,test">
+		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+			<property name="driverClassName" value="${jdbc.driver}" />
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+		</bean>
+
+		<!-- <jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+			<jdbc:script location="classpath:db/schema.sql" />
+			<jdbc:script location="classpath:db/zhuchang.sql" />
+			</jdbc:initialize-database> -->
+
+	</beans>
+
+	<!-- local开发测试环境 local -->
+	<beans profile="local">
+		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+			<property name="driverClassName" value="${jdbc.driver}" />
+			<property name="url" value="jdbc:mysql://127.0.0.1:3306/my373" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+		</bean>
+
+		<!-- <jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+			<jdbc:script location="classpath:db/schema.sql" />
+			<jdbc:script location="classpath:db/zhuchang.sql" />
+			</jdbc:initialize-database> -->
+
+	</beans>
+
+	<!-- 生产环境 prod,production -->
+	<beans profile="prod">
+		<!-- 生产环境，使用jndi数据源 -->
+		<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+			<property name="jndiName">
+				<!-- tomcat 配置名为 jdbc/zhuchang -->
+				<value>java:comp/env/jdbc/zhuchang</value>
+			</property>
+		</bean>
+
+		<!-- 或者 -->
+		<!-- <jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/zhuchang" /> -->
+	</beans>
+
+</beans>

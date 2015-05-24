@@ -1,0 +1,61 @@
+<#assign basePath="${request.getContextPath()}" />
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>index</title>
+
+<link rel="stylesheet" href="${basePath}/static/jquery-ui-bootstrap/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="${basePath}/static/jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.10.3.custom.css">
+<!--<link rel="stylesheet" href="${basePath}/static/jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.10.3.theme.css">-->
+<link rel="stylesheet" href="${basePath}/static/jquery-ui-bootstrap/assets/css/font-awesome.min.css">
+<!--[if IE 7]>
+    <link rel="stylesheet" href="${basePath}/static/jquery-ui-bootstrap/assets/css/font-awesome-ie7.min.css">
+    <![endif]-->
+<!--[if lt IE 9]>
+    <link rel="stylesheet" href="${basePath}/static/jquery-ui-bootstrap/css/custom-theme/jquery.ui.1.10.3.ie.css">
+    <![endif]-->
+
+<!-- <link href="${basePath}/static/jquery-ui/jquery-ui.min.css" rel="stylesheet"> -->
+<!-- <link href="${basePath}/static/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+<link href="${basePath}/static/core/main.css">
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="${basePath}/static/js/html5shiv.min.js"></script>
+      <script src="${basePath}/static/js/respond.min.js"></script>
+    <![endif]-->
+
+<script src="${basePath}/static/js/jquery.min.js"></script>
+<script src="${basePath}/static/jquery-ui/jquery-ui.min.js"></script>
+<script src="${basePath}/static/easyui/jquery.easyui.min.js"></script>
+<script src="${basePath}/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="${basePath}/static/core/main.js"></script>
+<script>
+	$(function() {
+		$("#datepicker").datepicker();
+		$("#format").change(function() {
+			$("#datepicker").datepicker("option", "dateFormat", $(this).val());
+		});
+	});
+</script>
+
+</head>
+<body>
+  <p>index</p>
+  <p>Date: <input type="text" id="datepicker" size="30"></p>
+
+  <p>Format options:<br> <select id="format">
+      <option value="mm/dd/yy">Default - mm/dd/yy</option>
+      <option value="yy-mm-dd">ISO 8601 - yy-mm-dd</option>
+      <option value="d M, y">Short - d M, y</option>
+      <option value="d MM, y">Medium - d MM, y</option>
+      <option value="DD, d MM, yy">Full - DD, d MM, yy</option>
+      <option value="'day' d 'of' MM 'in the year' yy">With text - 'day' d 'of' MM 'in the year' yy</option>
+  </select>
+  </p>
+
+  <p>&nbsp;</p>
+</body>
+</html>
