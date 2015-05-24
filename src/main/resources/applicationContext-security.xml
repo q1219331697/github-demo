@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--
+		xmlns:sec=... = < sec:
+		xmlns:security=... = < security: -->
+
+	<!-- http 中隐性定义有 springSecurityFilterChain -->
+	<!-- 从上到下匹配 -->
+	<!-- 不经过过滤器,如图片等静态资源用none性能好些 -->
+	<sec:http pattern="/static/**" security="none" />
+	<!-- 设置登录页为 空过滤器链,便于自定义页面 -->
+	<!-- <sec:http pattern="/spring_security_login**" security="none" /> -->
+
+	<!-- use-expressions="true" 支持 SpEL,permitAll,hasRole('ROLE_USER') -->
+	<sec:http use-expressions="true">
+		<!-- <sec:form-login login-page="/login" />
+			<sec:logout /> -->
+		<sec:form-login />
+		<sec:logout />
+		<!-- 经过过滤器,需取用户名,token等的地方用permitAll -->
+		<sec:intercept-url pattern="/public/**" access="permitAll" />
+		<sec:intercept-url pattern="/login**" access="permitAll" />
+		<sec:intercept-url pattern="/logout**" access="permitAll" />
+		<sec:intercept-url pattern="/admin**" access="hasRole('ROLE_USER')" />
+	</sec:http>
+
+	<!-- <sec:user-service id="userService">
+		<sec:user name="rod" password="rod" authorities="ROLE_SUPERVISOR,ROLE_USER" />
+		<sec:user name="dianne" password="dianne" authorities="ROLE_USER" />
+		<sec:user name="scott" password="scott" authorities="ROLE_USER" />
+		</sec:user-service> -->
+
+	<!-- <sec:authentication-manager>
+		<sec:authentication-provider>
+			<sec:user-service id="userService">
+				<sec:user name="rod" password="rod" authorities="ROLE_SUPERVISOR,ROLE_USER" />
+				<sec:user name="dianne" password="dianne" authorities="ROLE_USER" />
+				<sec:user name="scott" password="scott" authorities="ROLE_USER" />
+			</sec:user-service>
+		</sec:authentication-provider>
+	</sec:authentication-manager> -->
+</beans>

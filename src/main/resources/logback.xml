@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type
+			ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+		<encoder>
+			<pattern>%d - %-5level %logger - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 在Eclipse中运行，请到Eclipse的安装目录中找log文件，Tomcat下，请到Tomcat目录下找 -->
+	<!-- <property name="LOG_PATH" value="./logs" /> -->
+	<!-- ${v2:-toto} //格式是 ${变量名:-默认值}，光有冒号还不够，再加条短线后面才是默认值 -->
+	<property name="LOG_PATH" value="${catalina.home:-.}/logs" />
+	<property name="APP_NAME" value="app_name" />
+
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/${APP_NAME}_logFile.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+			<!-- keep 30 days worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d - %-4relative [%thread] %-5level %logger - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="FILE" />
+	</appender>
+
+	<!-- <logger name="org.springframework" level="INFO" />
+		<logger name="org.springframework.security" level="ALL" /> -->
+
+	<!-- if-else,需引入janino(org.codehaus.janino) -->
+	<if
+		condition='(property("spring.profiles.active") .equals ("dev")) || (property("spring.profiles.active") .equals ("test")) || (property("spring.profiles.active") .equals ("local"))'>
+		<then>
+			<!-- ALL < TRACE < DEBUG < INFO < WARN < ERROR < OFF -->
+			<root level="ALL">
+				<appender-ref ref="STDOUT" />
+			</root>
+		</then>
+		<else>
+			<root level="INFO">
+				<appender-ref ref="ASYNC" />
+			</root>
+		</else>
+	</if>
+
+</configuration>
+
