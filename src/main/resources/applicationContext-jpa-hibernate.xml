@@ -9,8 +9,12 @@
 
 	<!-- 配置Spring Data JPA扫描目录 -->
 	<!-- 只需定义接口，集成spring.data.jpa，实现由spring-data-jpa自动完成 -->
-	<jpa:repositories base-package="com.my373.*.dao" />
+	<!-- 自定义dao实现类后缀 -->
+	<!-- <jpa:repositories base-package="com.my373.repository" repository-impl-postfix="Impl" /> -->
 	<jpa:repositories base-package="com.my373.dao" />
+	<jpa:repositories base-package="com.my373.dao.impl" />
+	<jpa:repositories base-package="com.my373.*.dao" />
+	<jpa:repositories base-package="com.my373.*.dao.impl" />
 
 	<!-- JPA实体管理工厂的配置 -->
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

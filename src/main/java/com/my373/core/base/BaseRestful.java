@@ -42,22 +42,16 @@ import com.my373.core.AppForm;
  * <td colspan="1" rowspan="1" class="confluenceTd">&nbsp;</td>
  * </tr>
  * <tr>
+ * <td colspan="1" rowspan="1" class="confluenceTd">GET</td>
+ * <td colspan="1" rowspan="1" class="confluenceTd">/movie/new</td>
+ * <td colspan="1" rowspan="1" class="confluenceTd">Movie.editNew</td>
+ * <td colspan="1" rowspan="1" class="confluenceTd">&nbsp;</td>
+ * </tr>
+ * <tr>
  * <td colspan="1" rowspan="1" class="confluenceTd">POST</td>
  * <td colspan="1" rowspan="1" class="confluenceTd">/movie</td>
  * <td colspan="1" rowspan="1" class="confluenceTd">Movie.create</td>
  * <td colspan="1" rowspan="1" class="confluenceTd">&nbsp;</td>
- * </tr>
- * <tr>
- * <td colspan="1" rowspan="1" class="confluenceTd">PUT</td>
- * <td colspan="1" rowspan="1" class="confluenceTd">/movie/Thrillers</td>
- * <td colspan="1" rowspan="1" class="confluenceTd">Movie.update</td>
- * <td colspan="1" rowspan="1" class="confluenceTd">id="Thrillers"</td>
- * </tr>
- * <tr>
- * <td colspan="1" rowspan="1" class="confluenceTd">DELETE</td>
- * <td colspan="1" rowspan="1" class="confluenceTd">/movie/Thrillers</td>
- * <td colspan="1" rowspan="1" class="confluenceTd">Movie.destroy</td>
- * <td colspan="1" rowspan="1" class="confluenceTd">id="Thrillers"</td>
  * </tr>
  * <tr>
  * <td colspan="1" rowspan="1" class="confluenceTd">GET</td>
@@ -72,10 +66,16 @@ import com.my373.core.AppForm;
  * <td colspan="1" rowspan="1" class="confluenceTd">id="Thrillers"</td>
  * </tr>
  * <tr>
- * <td colspan="1" rowspan="1" class="confluenceTd">GET</td>
- * <td colspan="1" rowspan="1" class="confluenceTd">/movie/new</td>
- * <td colspan="1" rowspan="1" class="confluenceTd">Movie.editNew</td>
- * <td colspan="1" rowspan="1" class="confluenceTd">&nbsp;</td>
+ * <td colspan="1" rowspan="1" class="confluenceTd">PUT</td>
+ * <td colspan="1" rowspan="1" class="confluenceTd">/movie/Thrillers</td>
+ * <td colspan="1" rowspan="1" class="confluenceTd">Movie.update</td>
+ * <td colspan="1" rowspan="1" class="confluenceTd">id="Thrillers"</td>
+ * </tr>
+ * <tr>
+ * <td colspan="1" rowspan="1" class="confluenceTd">DELETE</td>
+ * <td colspan="1" rowspan="1" class="confluenceTd">/movie/Thrillers</td>
+ * <td colspan="1" rowspan="1" class="confluenceTd">Movie.destroy</td>
+ * <td colspan="1" rowspan="1" class="confluenceTd">id="Thrillers"</td>
  * </tr>
  * </tbody>
  * </table>
@@ -92,7 +92,7 @@ public interface BaseRestful<ID> {
 	 * 处理不带 id 请求参数的 GET 请求。 <br>
 	 * /book
 	 */
-	public String index(AppForm so, Model model, HttpServletRequest request, HttpServletResponse response);
+	public String index(AppForm form, Model model, HttpServletRequest request, HttpServletResponse response);
 
 	/**
 	 * 处理带 id 请求参数的 GET 请求。 <br>

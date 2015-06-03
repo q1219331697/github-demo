@@ -21,7 +21,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -110,7 +109,7 @@ public class Role implements java.io.Serializable {
 	/**
 	 * @return the userRoles
 	 */
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
+	@OneToMany(mappedBy = "role")
 	public Set<UserRole> getUserRoles() {
 		return userRoles;
 	}

@@ -39,7 +39,7 @@ public interface BaseService<T, ID extends Serializable> {
 	 * @param entity
 	 * @return
 	 */
-	<S extends T> S save(S entity);
+	T save(T entity);
 
 	/**
 	 * 保存多个实体
@@ -47,11 +47,14 @@ public interface BaseService<T, ID extends Serializable> {
 	 * @param entities
 	 * @return
 	 */
-	<S extends T> List<S> save(Iterable<S> entities);
+	List<T> save(Iterable<T> entities);
 
+	/**
+	 * save事务结束前保存，flush立即保存
+	 */
 	void flush();
 
-	<S extends T> S saveAndFlush(S entity);
+	T saveAndFlush(T entity);
 
 	void delete(ID id);
 
@@ -77,17 +80,24 @@ public interface BaseService<T, ID extends Serializable> {
 
 	List<T> findAll(Sort sort);
 
-	List<T> findAll(Specification<T> spec);
+	List<T> findAll(Specification<T> specification);
 
-	List<T> findAll(Specification<T> spec, Sort sort);
+	List<T> findAll(Specification<T> specification, Sort sort);
 
 	Page<T> findAll(Pageable pageable);
 
-	Page<T> findAll(Specification<T> spec, Pageable pageable);
+	Page<T> findAll(Specification<T> specification, Pageable pageable);
 
 	Page<T> findAll(String propertyName, Object value, Pageable pageable);
 
-	Page<T> findAll(Map<String, Object> map);
+	/**
+	 * 条件查询
+	 * 
+	 * @param paramMap
+	 * @param pageable
+	 * @return
+	 */
+	Page<T> findAll(Map<String, Object> paramMap, Pageable pageable);
 
 	long count();
 

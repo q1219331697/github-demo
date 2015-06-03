@@ -47,12 +47,15 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
 	public abstract BaseDao<T, ID> getDao();
 
 	@Override
-	public <S extends T> S save(S entity) {
+	public abstract Page<T> findAll(Map<String, Object> paramMap, Pageable pageable);
+
+	@Override
+	public T save(T entity) {
 		return getDao().save(entity);
 	}
 
 	@Override
-	public <S extends T> List<S> save(Iterable<S> entities) {
+	public List<T> save(Iterable<T> entities) {
 		return getDao().save(entities);
 	}
 
@@ -62,7 +65,7 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
 	}
 
 	@Override
-	public <S extends T> S saveAndFlush(S entity) {
+	public T saveAndFlush(T entity) {
 		return getDao().saveAndFlush(entity);
 	}
 
@@ -121,13 +124,13 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
 	}
 
 	@Override
-	public T findOne(Specification<T> spec) {
-		return getDao().findOne(spec);
+	public T findOne(Specification<T> specification) {
+		return getDao().findOne(specification);
 	}
 
 	@Override
 	public T findOne(final String propertyName, final Object value) {
-		Specification<T> spec = new Specification<T>() {
+		Specification<T> specification = new Specification<T>() {
 			@Override
 			public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				Predicate p = cb.equal(root.get(propertyName), value);
@@ -135,7 +138,7 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
 				return query.getRestriction();
 			}
 		};
-		return getDao().findOne(spec);
+		return getDao().findOne(specification);
 	}
 
 	@Override
@@ -154,8 +157,8 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
 	}
 
 	@Override
-	public List<T> findAll(Specification<T> spec) {
-		return getDao().findAll(spec);
+	public List<T> findAll(Specification<T> specification) {
+		return getDao().findAll(specification);
 	}
 
 	@Override
@@ -164,21 +167,13 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
 	}
 
 	@Override
-	public List<T> findAll(Specification<T> spec, Sort sort) {
-		return getDao().findAll(spec, sort);
+	public List<T> findAll(Specification<T> specification, Sort sort) {
+		return getDao().findAll(specification, sort);
 	}
 
 	@Override
-	public List<T> findAll(final String propertyName, final Object value) {
-		Specification<T> spec = new Specification<T>() {
-			@Override
-			public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				Predicate p = cb.equal(root.get(propertyName), value);
-				query.where(p);
-				return query.getRestriction();
-			}
-		};
-		return getDao().findAll(spec);
+	public List<T> findAll(String propertyName, Object value) {
+		return this.findAll(propertyName, value, null).getContent();
 	}
 
 	@Override
@@ -187,13 +182,13 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
 	}
 
 	@Override
-	public Page<T> findAll(Specification<T> spec, Pageable pageable) {
-		return getDao().findAll(spec, pageable);
+	public Page<T> findAll(Specification<T> specification, Pageable pageable) {
+		return getDao().findAll(specification, pageable);
 	}
 
 	@Override
 	public Page<T> findAll(final String propertyName, final Object value, Pageable pageable) {
-		Specification<T> spec = new Specification<T>() {
+		Specification<T> specification = new Specification<T>() {
 			@Override
 			public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				Predicate p = cb.equal(root.get(propertyName), value);
@@ -201,11 +196,8 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
 				return query.getRestriction();
 			}
 		};
-		return getDao().findAll(spec, pageable);
+		return getDao().findAll(specification, pageable);
 	}
-
-	@Override
-	public abstract Page<T> findAll(Map<String, Object> map);
 
 	@Override
 	public long count() {
@@ -213,8 +205,8 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
 	}
 
 	@Override
-	public long count(Specification<T> spec) {
-		return getDao().count(spec);
+	public long count(Specification<T> specification) {
+		return getDao().count(specification);
 	}
 
 }

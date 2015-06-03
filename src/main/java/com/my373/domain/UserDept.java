@@ -49,7 +49,7 @@ public class UserDept implements java.io.Serializable {
 	/**
 	 * 部门
 	 */
-	private Department department;
+	private Dept dept;
 
 	public UserDept() {
 	}
@@ -91,15 +91,15 @@ public class UserDept implements java.io.Serializable {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "deptId")
-	public Department getDepartment() {
-		return department;
+	public Dept getDept() {
+		return dept;
 	}
 
 	/**
 	 * 部门
 	 */
-	public void setDepartment(Department department) {
-		this.department = department;
+	public void setDept(Dept dept) {
+		this.dept = dept;
 	}
 
 }

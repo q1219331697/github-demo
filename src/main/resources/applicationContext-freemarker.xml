@@ -38,6 +38,8 @@
 				<prop key="number_format">0.######</prop>
 				<!-- 去掉前后空白 -->
 				<prop key="whitespace_stripping">true</prop>
+				<!-- ignore,debug,html_debug,rethrow -->
+				<prop key="template_exception_handler">ignore</prop>
 			</props>
 		</property>
 	</bean>

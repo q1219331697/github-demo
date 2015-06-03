@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -33,8 +32,8 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "tb_department")
-public class Department implements java.io.Serializable {
+@Table(name = "tb_dept")
+public class Dept implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -55,7 +54,7 @@ public class Department implements java.io.Serializable {
 
 	private Set<UserDept> userDepts = new HashSet<UserDept>(0);
 
-	public Department() {
+	public Dept() {
 	}
 
 	/**
@@ -105,7 +104,7 @@ public class Department implements java.io.Serializable {
 	/**
 	 * @return the userDepts
 	 */
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "department")
+	@OneToMany(mappedBy = "dept")
 	public Set<UserDept> getUserDepts() {
 		return userDepts;
 	}
