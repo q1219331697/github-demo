@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -104,7 +105,7 @@ public class Dept implements java.io.Serializable {
 	/**
 	 * @return the userDepts
 	 */
-	@OneToMany(mappedBy = "dept")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dept")
 	public Set<UserDept> getUserDepts() {
 		return userDepts;
 	}

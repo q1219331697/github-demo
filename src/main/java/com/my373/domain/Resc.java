@@ -16,83 +16,96 @@
 
 package com.my373.domain;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * 角色 Role
- * 
  * @author QQ:1219331697
  *
  */
 @Entity
-@Table(name = "tb_role")
-public class Role implements java.io.Serializable {
+@Table(name = "tb_resc")
+public class Resc implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 主键
+	 * 主键 resId
 	 */
-	private Integer roleId;
+	private Integer resId;
 
 	/**
 	 * 标题
 	 */
-	private String roleTitle;
+	private String resTitle;
+
+	/**
+	 * 网址
+	 */
+	private String url;
 
 	/**
 	 * 备注
 	 */
 	private String remark;
 
-	private Set<UserRole> userRoles = new HashSet<UserRole>(0);
-
 	private Set<RoleResc> roleRescs = new HashSet<RoleResc>(0);
 
-	public Role() {
+	/**
+	 * 
+	 */
+	public Resc() {
 	}
 
 	/**
-	 * 主键
+	 * 主键 resId
 	 */
 	@Id
 	@GeneratedValue
-	public Integer getRoleId() {
-		return roleId;
+	public Integer getResId() {
+		return resId;
 	}
 
 	/**
-	 * 主键
+	 * 主键 resId
 	 */
-	public void setRoleId(Integer roleId) {
-		this.roleId = roleId;
-	}
-
-	/**
-	 * 标题
-	 */
-	@Column(length = 16)
-	public String getRoleTitle() {
-		return roleTitle;
+	public void setResId(Integer resId) {
+		this.resId = resId;
 	}
 
 	/**
 	 * 标题
 	 */
-	public void setRoleTitle(String roleTitle) {
-		this.roleTitle = roleTitle;
+	public String getResTitle() {
+		return resTitle;
+	}
+
+	/**
+	 * 标题
+	 */
+	public void setResTitle(String resTitle) {
+		this.resTitle = resTitle;
+	}
+
+	/**
+	 * 网址
+	 */
+	public String getUrl() {
+		return url;
+	}
+
+	/**
+	 * 网址
+	 */
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	/**
@@ -110,35 +123,19 @@ public class Role implements java.io.Serializable {
 	}
 
 	/**
-	 * @return the userRoles
-	 */
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
-	public Set<UserRole> getUserRoles() {
-		return userRoles;
-	}
-
-	/**
-	 * @param userRoles
-	 *            the userRoles to set
-	 */
-	public void setUserRoles(Set<UserRole> userRoles) {
-		this.userRoles = userRoles;
-	}
-
-	/**
 	 * @return the roleRescs
 	 */
-	@OneToMany(mappedBy = "role")
+	@OneToMany(mappedBy = "resc")
 	public Set<RoleResc> getRoleRescs() {
 		return roleRescs;
 	}
 
 	/**
-	 * @param roleRescs the roleRescs to set
+	 * @param roleRescs
+	 *            the roleRescs to set
 	 */
 	public void setRoleRescs(Set<RoleResc> roleRescs) {
 		this.roleRescs = roleRescs;
 	}
-
 
 }
