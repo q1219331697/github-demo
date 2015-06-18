@@ -27,6 +27,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * 资源
+ * 
  * @author QQ:1219331697
  *
  */
@@ -34,6 +36,9 @@ import javax.persistence.Table;
 @Table(name = "tb_resc")
 public class Resc implements Serializable {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
 	/**

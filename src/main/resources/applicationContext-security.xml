@@ -26,6 +26,7 @@
 		<sec:intercept-url pattern="/login**" access="permitAll" />
 		<sec:intercept-url pattern="/logout**" access="permitAll" />
 		<sec:intercept-url pattern="/admin**" access="hasRole('ROLE_USER')" />
+		<sec:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
 	</sec:http>
 
 	<!-- <sec:user-service id="userService">
@@ -34,13 +35,14 @@
 		<sec:user name="scott" password="scott" authorities="ROLE_USER" />
 		</sec:user-service> -->
 
-	<!-- <sec:authentication-manager>
+	<sec:authentication-manager>
 		<sec:authentication-provider>
-			<sec:user-service id="userService">
+			<sec:user-service id="userService1">
 				<sec:user name="rod" password="rod" authorities="ROLE_SUPERVISOR,ROLE_USER" />
+				<sec:user name="lisi" password="123456" authorities="ROLE_SUPERVISOR,ROLE_USER" />
 				<sec:user name="dianne" password="dianne" authorities="ROLE_USER" />
 				<sec:user name="scott" password="scott" authorities="ROLE_USER" />
 			</sec:user-service>
 		</sec:authentication-provider>
-	</sec:authentication-manager> -->
+	</sec:authentication-manager>
 </beans>

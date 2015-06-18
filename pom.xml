@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.my373.demo</groupId>
-  <artifactId>github-demo</artifactId>
-  <version>${project.version}</version>
-  <packaging>war</packaging>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.my373.demo</groupId>
+	<artifactId>github-demo</artifactId>
+	<version>${project.version}</version>
+	<packaging>war</packaging>
 
 	<properties>
 		<!-- project -->
@@ -44,6 +45,9 @@
 
 		<!-- servlet api -->
 		<servlet-api.version>3.0.1</servlet-api.version>
+
+		<!-- json jackson -->
+		<jackson.version>2.6.0-rc1</jackson.version>
 
 		<!-- log -->
 		<logback.version>1.1.3</logback.version>
@@ -143,6 +147,11 @@
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 		</dependency>
+		<!-- json jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
 		<!-- spring-security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -208,6 +217,11 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-hibernate4</artifactId>
+			<version>2.6.0-rc1</version>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>
@@ -355,6 +369,23 @@
 				<groupId>jstl</groupId>
 				<artifactId>jstl</artifactId>
 				<version>${jstl.version}</version>
+			</dependency>
+
+			<!-- json jackson -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
 			</dependency>
 
 			<!-- log -->

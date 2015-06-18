@@ -16,7 +16,11 @@
 
 package com.my373.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -27,10 +31,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my373.core.AppForm;
 import com.my373.core.base.BaseController;
 import com.my373.core.base.BaseRestful;
+import com.my373.domain.Resc;
+import com.my373.domain.Role;
+import com.my373.domain.RoleResc;
+import com.my373.domain.User;
+import com.my373.domain.UserRole;
+import com.my373.service.UserRoleService;
 import com.my373.service.UserService;
 
 /**
@@ -43,14 +56,55 @@ public class UserController extends BaseController implements BaseRestful<Intege
 
 	@Resource
 	private UserService userService;
+	@Resource
+	private UserRoleService userRoleService;
 
 	@RequestMapping(value = { "", "/index" })
 	public String index(AppForm form, Model model, HttpServletRequest request, HttpServletResponse response) {
 		userService.findAll("username", 1);
 		userService.findAll(new PageRequest(0, 10));
 		userService.findAll((Map<String, Object>) null, (Pageable) null);
-		return null;
+		return "/user/index.html";
 	}
+
+	@RequestMapping(value = "/index.json", produces = "application/json;charset=utf-8")
+	@ResponseBody
+	public List<Node> json() {
+		List<Node> nodes1 = new ArrayList<Node>(0);
+
+		List<User> users = userService.findAll();
+		for (User user : users) {
+			List<Node> nodes2 = new ArrayList<Node>(0);
+
+			Set<UserRole> userRoles = user.getUserRoles();
+			for (UserRole userRole : userRoles) {
+				List<Node> nodes3 = new ArrayList<Node>(0);
+
+				Role role = userRole.getRole();
+				Set<RoleResc> roleRescs = role.getRoleRescs();
+				for (RoleResc roleResc : roleRescs) {
+					Resc resc = roleResc.getResc();
+					Node node = new Node(resc.getResId(), resc.getResTitle());
+					nodes3.add(node);
+				}
+				Node node = new Node(role.getRoleId(), role.getRoleTitle(), nodes3);
+				nodes2.add(node);
+			}
+
+			Node node = new Node(user.getUserId(), user.getUsername(), nodes2);
+			nodes1.add(node);
+		}
+		return nodes1;
+	}
+
+	// public List<UserRole> json() {
+	// List<UserRole> list = userRoleService.findAll();
+	// return list;
+	// }
+	// public Set<UserRole> Json() {
+	// Set<UserRole> set = userService.findAll().get(0).getUserRoles();
+	// return set;
+	// }
 
 	/*
 	 * (non-Javadoc)

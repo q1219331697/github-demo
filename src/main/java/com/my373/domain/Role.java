@@ -128,17 +128,17 @@ public class Role implements java.io.Serializable {
 	/**
 	 * @return the roleRescs
 	 */
-	@OneToMany(mappedBy = "role")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
 	public Set<RoleResc> getRoleRescs() {
 		return roleRescs;
 	}
 
 	/**
-	 * @param roleRescs the roleRescs to set
+	 * @param roleRescs
+	 *            the roleRescs to set
 	 */
 	public void setRoleRescs(Set<RoleResc> roleRescs) {
 		this.roleRescs = roleRescs;
 	}
-
 
 }

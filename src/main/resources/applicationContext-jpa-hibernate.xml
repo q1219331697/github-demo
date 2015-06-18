@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<!-- 配置Spring Data JPA扫描目录 -->
 	<!-- 只需定义接口，集成spring.data.jpa，实现由spring-data-jpa自动完成 -->
@@ -50,44 +51,50 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
-	<!-- 配置AOP事务拦截 -->
-	<!-- <aop:config>
-		<aop:pointcut id="ServiceMethods" expression="execution(public * com.my373.service.*.impl.*.*(..))"
-		/>
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="ServiceMethods" />
-		</aop:config> -->
-
 	<!-- 配置事务通知的属性 -->
-	<!-- <tx:advice id="txAdvice" transaction-manager="transactionManager">
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
-		<tx:method name="*" propagation="REQUIRED" />
-		<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="flush*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
 		</tx:attributes>
-		</tx:advice> -->
+	</tx:advice>
 
-	<bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+	<!-- 配置AOP事务拦截 -->
+	<aop:config>
+		<aop:pointcut id="ServiceMethods" expression="execution(* com.my373.service.*.impl.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="ServiceMethods" />
+	</aop:config>
+
+	<!-- <bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
 		<property name="transactionManager" ref="transactionManager" />
 		<property name="transactionAttributes">
-			<props>
-				<prop key="*">PROPAGATION_REQUIRED</prop>
-				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
-			</props>
+		<props>
+		<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+		<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+		<prop key="save*">PROPAGATION_REQUIRED</prop>
+		<prop key="update*">PROPAGATION_REQUIRED</prop>
+		<prop key="delete*">PROPAGATION_REQUIRED</prop>
+		<prop key="create*">PROPAGATION_REQUIRED</prop>
+		</props>
 		</property>
-	</bean>
+		</bean> -->
 
-	<bean id="transactionBeanNameAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+	<!-- 粒度不细，可能会造成其他工具类以Service结尾也创建事务 -->
+	<!-- <bean id="transactionBeanNameAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
 		<property name="interceptorNames">
-			<list>
-				<value>transactionInterceptor</value>
-			</list>
+		<list>
+		<value>transactionInterceptor</value>
+		</list>
 		</property>
 		<property name="beanNames">
-			<list>
-				<value>*Service</value>
-			</list>
+		<list>
+		<value>*Service</value>
+		</list>
 		</property>
-	</bean>
-
+		</bean> -->
 
 	<!-- beans必须放到bean的后面，保险些，放到文件最后 -->
 	<!-- 团队开发测试环境 dev,test -->

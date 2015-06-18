@@ -70,17 +70,17 @@
 	-->
 
 	<!-- spring-security -->
-	<!-- <filter> -->
 	<!-- 1.定义在org.springframework.security.config.BeanIds.class -->
 	<!-- 2.applicationContext-security.xml 中配置 http -->
 	<!-- 3.名字必须为springSecurityFilterChain,区分大小写 -->
-	<!-- <filter-name>springSecurityFilterChain</filter-name>
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-		</filter>
-		<filter-mapping>
+	</filter>
+	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
-		</filter-mapping> -->
+	</filter-mapping>
 
 	<!-- www 前台 -->
 	<servlet>

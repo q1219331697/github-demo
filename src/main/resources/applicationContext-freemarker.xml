@@ -11,9 +11,8 @@
 	<bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<property name="freemarkerVariables">
 			<map>
-				<!-- key = "前台标签名称" value-ref = "bean_id" -->
-
 				<entry key="xml_escape" value-ref="fmXmlEscape" />
+				<!-- key = "前台标签名称" value-ref = "bean_id" -->
 			</map>
 		</property>
 		<!-- <property name="templateLoaderPath" value="file:${templateLoaderPath}/WEB-INF/view/" /> -->

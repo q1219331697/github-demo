@@ -26,6 +26,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * 部门
  * 
@@ -36,6 +38,9 @@ import javax.persistence.Table;
 @Table(name = "tb_dept")
 public class Dept implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -105,6 +110,7 @@ public class Dept implements java.io.Serializable {
 	/**
 	 * @return the userDepts
 	 */
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dept")
 	public Set<UserDept> getUserDepts() {
 		return userDepts;

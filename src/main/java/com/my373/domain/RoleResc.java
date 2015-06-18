@@ -34,6 +34,9 @@ import javax.persistence.Table;
 @Table(name = "tb_role_resc")
 public class RoleResc implements Serializable {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
 	/**

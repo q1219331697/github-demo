@@ -137,7 +137,10 @@ public class User implements java.io.Serializable {
 	/**
 	 * @return the userRoles
 	 */
-	@OneToMany(mappedBy = "user")
+	// @JsonIgnoreProperties(value = { "user", "role" })
+	// @JsonIgnore
+	// @JsonManagedReference
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	public Set<UserRole> getUserRoles() {
 		return userRoles;
 	}

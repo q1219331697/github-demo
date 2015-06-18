@@ -34,6 +34,9 @@ import javax.persistence.Table;
 @Table(name = "tb_user_dept")
 public class UserDept implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
