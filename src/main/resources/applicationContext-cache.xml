@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:cache="http://www.springframework.org/schema/cache"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
 		<property name="configLocation">
@@ -33,45 +36,84 @@
 		</property>
 	</bean>
 
+	<!-- 配置AOP拦截 -->
+	<!--
+		1.在Spring配置文件中，所有AOP相关定义必须放在<aop:config>标签下，
+		该标签下可以有<aop:pointcut>、<aop:advisor>、<aop:aspect>标签，配置顺序不可变。
+
+		2.<aop:pointcut>：用来定义切入点，该切入点可以重用；
+		AspectJ使用 且（&&）、或（||）、非（！）来组合切入点表达式。
+		在Schema风格下，由于在XML中使用“&&”需要使用转义字符“&amp;&amp;”来代替之，所以很不方便，
+		因此Spring ASP 提供了and、or、not来代替&&、||、！。
+
+		3.<aop:advisor>：用来定义只有一个通知和一个切入点的切面；
+
+		4.<aop:aspect>：用来定义切面，该切面可以包含多个切入点和通知，
+		而且标签内部的通知和切入点定义是无序的；和advisor的区别就在此，advisor只包含一个通知和一个切入点。
+		<aop:aspect ref="aspectBean">
+		定义切入点
+		<aop:pointcut id="myAspect" expression="execution(public * com.my373.bean..*.myfun*(..))" />
+
+		前置通知
+		<aop:before pointcut-ref="myAspect" method="prepareDomain"/>
+
+		后置通知
+		<aop:after-returning pointcut-ref="myAspect" method="afterReturning"/>
+		<aop:after-throwing pointcut-ref="myAspect" method="afterThrowing"/>
+		<aop:after pointcut-ref="myAspect" method="afterDomain"/>
+
+		环绕通知
+		<aop:around method="around" pointcut="execution(* com.my373.bean..*.sayAround(..))"/>
+		</aop:aspect>
+	-->
+	<aop:config>
+		<!-- 缓存切入点 -->
+		<aop:advisor advice-ref="cacheMethodInterceptor" pointcut="execution(* com.my373.service.*.impl.*.find*(..))"
+			order="1" />
+		<aop:advisor advice-ref="cacheAfterReturningAdvice"
+			pointcut="execution(* com.my373.service.*.impl.*.save*(..))||execution(* com.my373.service.*.impl.*.delete*(..))"
+			order="2" />
+	</aop:config>
+
 	<!-- 定义哪些方法被拦截 -->
-	<bean id="cacheMethodPointcutAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+	<!-- <bean id="cacheMethodPointcutAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
 		<property name="advice">
-			<ref bean="cacheMethodInterceptor" />
+		<ref bean="cacheMethodInterceptor" />
 		</property>
 		<property name="mappedNames">
-			<list>
-				<value>find*</value>
-			</list>
+		<list>
+		<value>find*</value>
+		</list>
 		</property>
-	</bean>
+		</bean> -->
 
-	<bean id="cacheAfterReturningAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+	<!-- <bean id="cacheAfterReturningAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
 		<property name="advice">
-			<ref bean="cacheAfterReturningAdvice" />
+		<ref bean="cacheAfterReturningAdvice" />
 		</property>
 		<property name="mappedNames">
-			<list>
-				<value>add*</value>
-				<value>edit*</value>
-				<value>delete*</value>
-				<value>save*</value>
-			</list>
+		<list>
+		<value>add*</value>
+		<value>edit*</value>
+		<value>delete*</value>
+		<value>save*</value>
+		</list>
 		</property>
-	</bean>
+		</bean> -->
 
-	<bean id="cacheBeanNameAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+	<!-- <bean id="cacheBeanNameAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
 		<property name="interceptorNames">
-			<list>
-				<!-- <value>cacheMethodInterceptor</value> -->
-				<!-- 修改为方法拦截 -->
-				<value>cacheMethodPointcutAdvisor</value>
-				<value>cacheAfterReturningAdvisor</value>
-			</list>
+		<list>
+		<value>cacheMethodInterceptor</value>
+		修改为方法拦截
+		<value>cacheMethodPointcutAdvisor</value>
+		<value>cacheAfterReturningAdvisor</value>
+		</list>
 		</property>
 		<property name="beanNames">
-			<list>
-				<value>*Service</value>
-			</list>
+		<list>
+		<value>*Service</value>
+		</list>
 		</property>
-	</bean>
+		</bean> -->
 </beans>

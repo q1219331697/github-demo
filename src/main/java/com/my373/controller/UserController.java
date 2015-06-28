@@ -17,22 +17,26 @@
 package com.my373.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my373.core.AppForm;
@@ -61,9 +65,23 @@ public class UserController extends BaseController implements BaseRestful<Intege
 
 	@RequestMapping(value = { "", "/index" })
 	public String index(AppForm form, Model model, HttpServletRequest request, HttpServletResponse response) {
-		userService.findAll("username", 1);
-		userService.findAll(new PageRequest(0, 10));
-		userService.findAll((Map<String, Object>) null, (Pageable) null);
+		// userService.findAll("username", 1);
+		// userService.findAll(new PageRequest(0, 10));
+		// userService.findAll((Map<String, Object>) null, (Pageable) null);
+
+		Specification<User> specification = new Specification<User>() {
+			@Override
+			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				Join<User, UserRole> join = root.join("userRoles", JoinType.LEFT);
+				Predicate p = cb.equal(join.get("role").get("roleId").as(Integer.class), "2");
+				// Predicate p = null;// cb.equal(root.get(propertyName), value);
+				query.where(p);
+				return query.getRestriction();
+			}
+		};
+
+		List<User> users = userService.findAll(specification);
+		logger.debug(users.toString());
 		return "/user/index.html";
 	}
 
@@ -85,6 +103,7 @@ public class UserController extends BaseController implements BaseRestful<Intege
 				for (RoleResc roleResc : roleRescs) {
 					Resc resc = roleResc.getResc();
 					Node node = new Node(resc.getResId(), resc.getResTitle());
+					node.setNum(3);
 					nodes3.add(node);
 				}
 				Node node = new Node(role.getRoleId(), role.getRoleTitle(), nodes3);
@@ -94,6 +113,25 @@ public class UserController extends BaseController implements BaseRestful<Intege
 			Node node = new Node(user.getUserId(), user.getUsername(), nodes2);
 			nodes1.add(node);
 		}
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		mapper.setSerializationInclusion(Include.NON_NULL);
+		//
+		// //通过该方法对mapper对象进行设置，所有序列化的对象都将按改规则进行系列化
+		// //Include.Include.ALWAYS 默认
+		// //Include.NON_DEFAULT 属性为默认值不序列化
+		// //Include.NON_EMPTY 属性为 空（“”） 或者为 NULL 都不序列化
+		// //Include.NON_NULL 属性为NULL 不序列化
+		//
+		String outJson = null;
+		try {
+			outJson = mapper.writeValueAsString(nodes1);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		System.out.println(outJson);
+
 		return nodes1;
 	}
 

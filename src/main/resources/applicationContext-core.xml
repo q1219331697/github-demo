@@ -23,7 +23,7 @@
 
 	<import resource="applicationContext-freemarker.xml" />
 	<import resource="applicationContext-jpa-hibernate.xml" />
-	<!-- <import resource="applicationContext-cache.xml" /> -->
+	<import resource="applicationContext-cache.xml" />
 	<import resource="applicationContext-security.xml" />
 	<import resource="applicationContext-springmvc.xml" />
 

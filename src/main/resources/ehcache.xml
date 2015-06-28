@@ -59,16 +59,23 @@
         timeToLiveSeconds="0"
         overflowToDisk="false"
         />
-	
+
+	<!-- 集群配置 -->
+	<!-- 自动发现，适合一个子网内 -->
+	<cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+		properties="peerDiscovery=automatic, multicastGroupAddress=230.0.0.1, multicastGroupPort=4446, timeToLive=32" />
+
 	<!-- 还是新建一个 cache 否则后面问题很多 -->
 	<cache name="myCache"
         maxElementsInMemory="10000"
         eternal="true"
         timeToIdleSeconds="0"
         timeToLiveSeconds="0"
-        overflowToDisk="false"
-        />
-        
+        overflowToDisk="false">
+ 		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicatePuts=false,replicateUpdatesViaCopy=false" />
+    </cache>
+ 
     <!--Predefined caches.  Add your cache configuration settings here.
         If you do not have a configuration for your cache a WARNING will be issued when the
         CacheManager starts

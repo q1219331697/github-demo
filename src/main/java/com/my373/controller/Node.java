@@ -29,6 +29,7 @@ public class Node implements java.io.Serializable {
 
 	private Object v;
 	private Object n;
+	private Integer num;
 	private List<Node> s = new ArrayList<Node>(0);
 
 	public Node() {
@@ -67,5 +68,13 @@ public class Node implements java.io.Serializable {
 
 	public void setS(List<Node> s) {
 		this.s = s;
+	}
+
+	public Integer getNum() {
+		return num;
+	}
+
+	public void setNum(Integer num) {
+		this.num = num;
 	}
 }

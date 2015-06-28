@@ -68,9 +68,9 @@ a:hover{color:#00f;}
 </div>
 
 <script src="http://cdn.staticfile.org/jquery/2.1.1-rc2/jquery.min.js"></script>
-<script src="js/jquery.cxselect.min.js"></script>
+<script src="jquery.cxselect.min.js"></script>
 <script>
-$.cxSelect.defaults.url = 'js/cityData.min.json';
+$.cxSelect.defaults.url = 'cityData.min.json';
 
 $('#city_china').cxSelect({
 	selects: ['province', 'city', 'area']
@@ -82,14 +82,14 @@ $('#city_china_val').cxSelect({
 });
 
 $('#global_location').cxSelect({
-	url: 'js/globalData.min.json',
+	url: 'globalData.min.json',
 	selects: ['country', 'state', 'city', 'region'],
 	nodata: 'none'
 });
 
 $('#city_custom').cxSelect({
 	selects: ['first', 'second', 'third', 'fourth', 'fifth'],
-	required: true,
+	//required: true,
 	url: [
 		{'v': 1, 'n': '第一级 >', 's': [
 			{'v': 2, 'n': '第二级 >', 's': [

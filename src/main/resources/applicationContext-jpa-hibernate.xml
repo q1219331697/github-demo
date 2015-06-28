@@ -64,8 +64,9 @@
 
 	<!-- 配置AOP事务拦截 -->
 	<aop:config>
+		<!-- 事务切入点 -->
 		<aop:pointcut id="ServiceMethods" expression="execution(* com.my373.service.*.impl.*.*(..))" />
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="ServiceMethods" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="ServiceMethods" order="3" />
 	</aop:config>
 
 	<!-- <bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
